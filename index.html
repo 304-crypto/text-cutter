@@ -516,20 +516,61 @@
         setInterval(updateTime, 1000);
         updateTime();
 
+        // 한글 어미 제거 함수
+        function removeKoreanEndings(word) {
+            // 동사/형용사 어미 패턴 (빈도 높은 순서)
+            const endings = [
+                // 조사
+                '으로', '로서', '에서', '부터', '까지', '에게', '한테', '에도', '에는', '에만',
+                '으로서', '으로써', '로써', '로부터',
+                '이며', '이고', '이나', '이든', '이라', '이란', '이랑',
+                '에', '을', '를', '이', '가', '은', '는', '과', '와', '도', '만', '의', '로',
+                // 어미
+                '하여', '하고', '하며', '하는', '하다', '한다', '했다', '합니다',
+                '되어', '되고', '되며', '되는', '된다', '됩니다',
+                '시키다', '시키고', '시키며', '시키는',
+                '이다', '입니다', '였다', '였습니다',
+                '스럽다', '스럽고', '스럽게',
+                '적이다', '적으로', '적인',
+                '하기', '되기', '시키기',
+                '거나', '거든', '지만', '면서', '므로', '기에',
+                '니다', '습니다', 'ㅂ니다',
+                '었다', '았다', '였다', '겠다',
+                '네요', '어요', '아요', '여요',
+                '세요', '으세요',
+                'ㄴ다', '는다', '다'
+            ];
+
+            let stem = word;
+
+            // 가장 긴 어미부터 제거 시도 (greedy matching)
+            for (const ending of endings) {
+                if (stem.endsWith(ending) && stem.length > ending.length + 1) {
+                    stem = stem.slice(0, -ending.length);
+                    break; // 한 번만 제거
+                }
+            }
+
+            return stem;
+        }
+
         // 한글 키워드 추출 함수
         function extractKoreanKeywords(text) {
             // 한글만 추출 (2글자 이상)
             const regex = /[가-힣]{2,}/g;
             const words = text.match(regex) || [];
 
-            // 중복 제거 (순서 유지)
+            // 어미 제거 및 중복 제거 (순서 유지)
             const seen = new Set();
             const result = [];
 
             words.forEach(word => {
-                if (!seen.has(word)) {
-                    seen.add(word);
-                    result.push(word);
+                const stem = removeKoreanEndings(word);
+
+                // 어미 제거 후 2글자 이상만 유지
+                if (stem.length >= 2 && !seen.has(stem)) {
+                    seen.add(stem);
+                    result.push(stem);
                 }
             });
 
