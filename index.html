@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>한글 텍스트 도구 - Korean Text Tools</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✂️</text></svg>">
+	<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✂️</text></svg>">
     <meta name="description" content="한글 키워드 추출 및 띄어쓰기 교정 도구">
     <style>
         /* ========================================
@@ -674,274 +674,299 @@
             }
         }
 
-        // ========================================
-        // 키워드 추출 기능
-        // ========================================
+// ========================================
+// 키워드 추출 기능 (개선)
+// ========================================
 
-        // 한글 어미 제거 함수
-        function removeKoreanEndings(word) {
-            const endings = [
-                '습니다', 'ㅂ니다', '십시오', '세요',
-                '되길', '하길', '되도록', '하도록',
-                '에서', '으로', '부터', '까지', '처럼', '마저',
-                '는', '은', '을', '를', '이', '가', '에', '와', '과', '의', '도', '만', '로',
-                '한', '할', '했', '하', '해', '히',
-                '요', '어', '아', '지', '고', '게', '네', '죠',
-                '되', '시', '니', '나', '다', '길', '봐', '며', '면', '자',
-            ];
+// 한글 명사만 추출하는 함수
+function extractKoreanKeywords(text) {
+    // 순수 한글만 추출 (2글자 이상)
+    const regex = /[가-힣]{2,}/g;
+    const words = text.match(regex) || [];
 
-            let stem = word;
+    const seen = new Set();
+    const result = [];
 
-            for (const ending of endings) {
-                if (stem.endsWith(ending) && stem.length > ending.length + 1) {
-                    stem = stem.slice(0, -ending.length);
-                    break;
+    words.forEach(word => {
+        const stem = removeKoreanEndings(word);
+
+        // 2글자 이상의 한글 명사만 추가
+        if (stem.length >= 2 && /^[가-힣]+$/.test(stem) && !seen.has(stem)) {
+            seen.add(stem);
+            result.push(stem);
+        }
+    });
+
+    return {
+        total: words.length,
+        unique: result,
+        removed: words.length - result.length
+    };
+}
+
+// 한글 어미 제거 함수 (개선)
+function removeKoreanEndings(word) {
+    // 순수 한글이 아니면 그대로 반환
+    if (!/^[가-힣]+$/.test(word)) {
+        return word;
+    }
+
+    const endings = [
+        // 어미 (긴 것부터)
+        '습니다', '십시오', 'ㅂ니다',
+        '되길', '하길', '되도록', '하도록',
+        // 조사
+        '에서', '으로부터', '으로써', '부터', '까지', '처럼', '마저', '조차',
+        // 단음절 조사
+        '는', '은', '을', '를', '이', '가', '에', '와', '과', '의', '도', '만', '로',
+        // 어미
+        '한', '할', '했', '하', '해', '히',
+        '요', '어', '아', '지', '고', '게', '네', '죠',
+        '되', '시', '니', '나', '다', '길', '며', '면', '자', '세', '죠'
+    ];
+
+    let stem = word;
+
+    // 최대 2번까지 제거 (복합 어미 대응)
+    for (let i = 0; i < 2; i++) {
+        let removed = false;
+        for (const ending of endings) {
+            if (stem.endsWith(ending) && stem.length > ending.length + 1) {
+                stem = stem.slice(0, -ending.length);
+                removed = true;
+                break;
+            }
+        }
+        if (!removed) break;
+    }
+
+    return stem;
+}
+
+// ========================================
+// 띄어쓰기 만들기 기능 (대폭 개선)
+// ========================================
+
+// 확장된 한글 사전
+const KOREAN_DICTIONARY = {
+    // 음악 관련
+    music: [
+        '사일런트기타', '드럼연습패드', '전자바이올린', '롤업피아노', '피아노소음키퍼',
+        '글로켄슈필', '알토리코더', '콜미바이유어네임', '트로트창법배우',
+        '사일런트', '바이올린', '오카리나', '리코더', '피아노', '기타', '드럼', 
+        '첼로', '플루트', '트럼펫', '색소폰', '단소', '가야금', '해금', '거문고', 
+        '대금', '소금', '아쟁', '연습', '패드', '운지법', '창법', '발성법', 
+        '소음', '키퍼', '악기', '롤업', '음악', '노래', '멜로디', '화음',
+        '전주', '반주', '합창', '독창', '성악', '트로트', '클래식', '재즈'
+    ],
+    
+    // 드라마/영화/책
+    media: [
+        '이풍진세상을만났으니', '보건교사안은영', '베르테르', '넥스트', '마우스',
+        '경우의수', '고백부부', '사생활', '누가뭐래도', '베르테르', '피가로'
+    ],
+    
+    // 인명
+    names: [
+        '쥬얼리이지현', '김민기', '이가인', '김진표', '요게벳'
+    ],
+    
+    // 일반 명사 (빈도순)
+    common: [
+        '세상', '사람', '친구', '가족', '부모', '아내', '남편', '아이', '아들', '딸',
+        '학교', '회사', '병원', '은행', '시장', '상점', '마트',
+        '집', '방', '거실', '주방', '화장실', '욕실', '베란다',
+        '나라', '도시', '마을', '동네', '지역', '곳',
+        '시간', '날짜', '요일', '주말', '평일',
+        '아침', '점심', '저녁', '밤', '새벽',
+        '봄', '여름', '가을', '겨울',
+        '음식', '밥', '국', '반찬', '요리',
+        '영어', '토익', '그룹', '삼진', '반',
+        '비밀', '위험', '지명', '결혼', '사랑', '행복',
+        '남자', '여자', '어른', '어린이', '청소년'
+    ],
+    
+    // 동사 어간
+    verbs: [
+        '배우', '가르치', '공부하', '연습하', '익히',
+        '듣', '보', '읽', '쓰', '말하',
+        '만들', '만나', '가', '오', '와', '되', '하',
+        '먹', '마시', '자', '일어나', '눕',
+        '사랑하', '좋아하', '싫어하', '미워하',
+        '생각하', '느끼', '알', '모르', '기억하'
+    ],
+    
+    // 형용사
+    adjectives: [
+        '아름답', '예쁘', '멋지', '훌륭하',
+        '좋', '나쁘', '크', '작', '높', '낮',
+        '밝', '어둡', '따뜻하', '차갑', '뜨겁',
+        '위험하', '안전하', '편하', '불편하'
+    ],
+    
+    // 기능어
+    particles: [
+        '에서', '으로', '에게', '한테', '부터', '까지', '처럼', '마저', '조차',
+        '이', '가', '을', '를', '은', '는', '의', '에', '도', '만', '와', '과', '로',
+        '이나', '나', '든지', '라도', '마저', '조차', '부터', '까지'
+    ]
+};
+
+// 모든 사전을 하나로 합치고 길이순 정렬
+function buildDictionary() {
+    const allWords = [];
+    
+    for (const category in KOREAN_DICTIONARY) {
+        allWords.push(...KOREAN_DICTIONARY[category]);
+    }
+    
+    // 중복 제거 및 길이순 정렬 (긴 것부터)
+    return [...new Set(allWords)].sort((a, b) => b.length - a.length);
+}
+
+// 한글 띄어쓰기 처리 (개선된 알고리즘)
+function correctSpacing(text) {
+    // 이미 띄어쓰기가 있으면 그대로 반환
+    if (text.includes(' ')) {
+        return text;
+    }
+
+    // 순수 한글이 아닌 경우 기본 처리
+    if (!/^[가-힣]+$/.test(text)) {
+        return basicSpacing(text);
+    }
+
+    // 사전 기반 띄어쓰기
+    const dictionary = buildDictionary();
+    const result = dictionaryBasedSpacing(text, dictionary);
+    
+    // 후처리: 조사 붙이기
+    return mergeParticles(result);
+}
+
+// 사전 기반 띄어쓰기
+function dictionaryBasedSpacing(text, dictionary) {
+    let words = [];
+    let i = 0;
+
+    while (i < text.length) {
+        let matched = false;
+        let bestMatch = '';
+
+        // 현재 위치에서 가능한 가장 긴 매칭 찾기
+        for (const word of dictionary) {
+            if (text.substring(i, i + word.length) === word) {
+                // 더 긴 매칭이 있는지 확인
+                if (word.length > bestMatch.length) {
+                    bestMatch = word;
                 }
             }
-
-            return stem;
         }
 
-        // 한글 키워드 추출 함수
-        function extractKoreanKeywords(text) {
-            const regex = /[가-힣]{2,}/g;
-            const words = text.match(regex) || [];
-
-            const seen = new Set();
-            const result = [];
-
-            words.forEach(word => {
-                const stem = removeKoreanEndings(word);
-
-                if (stem.length >= 2 && !seen.has(stem)) {
-                    seen.add(stem);
-                    result.push(stem);
-                }
-            });
-
-            return {
-                total: words.length,
-                unique: result,
-                removed: words.length - result.length
-            };
+        if (bestMatch) {
+            words.push(bestMatch);
+            i += bestMatch.length;
+            matched = true;
         }
 
-        // 키워드 추출 실행
-        function extractKeywords() {
-            const inputText = document.getElementById('extractInput').value;
-
-            if (!inputText.trim()) {
-                showToast('⚠️ 텍스트를 입력해주세요!', '#f59e0b');
-                return;
-            }
-
-            const result = extractKoreanKeywords(inputText);
-
-            if (result.unique.length === 0) {
-                showToast('❌ 추출된 한글 키워드가 없습니다!', '#ef4444');
-                return;
-            }
-
-            extractedKeywords = result.unique;
-
-            // 통계 업데이트
-            document.getElementById('extractTotalCount').textContent = result.total;
-            document.getElementById('extractUniqueCount').textContent = result.unique.length;
-            document.getElementById('extractRemovedCount').textContent = result.removed;
-
-            // 결과 표시
-            const resultBox = document.getElementById('extractResultBox');
-            resultBox.innerHTML = result.unique
-                .map((keyword, index) => `<div class="keyword-item" style="animation-delay: ${index * 0.02}s">${keyword}</div>`)
-                .join('');
-
-            // 결과 섹션 표시
-            document.getElementById('extractResultSection').classList.add('active');
-
-            showToast('✅ 키워드 추출 완료!', '#10b981');
-        }
-
-        // 클립보드에 복사
-        function copyExtractResult() {
-            if (extractedKeywords.length === 0) {
-                showToast('⚠️ 추출된 키워드가 없습니다!', '#f59e0b');
-                return;
-            }
-
-            const text = extractedKeywords.join('\n');
-            navigator.clipboard.writeText(text).then(() => {
-                showToast('📋 클립보드에 복사되었습니다!', '#10b981');
-            }).catch(() => {
-                showToast('❌ 복사에 실패했습니다!', '#ef4444');
-            });
-        }
-
-        // 파일 다운로드
-        function downloadExtractResult() {
-            if (extractedKeywords.length === 0) {
-                showToast('⚠️ 추출된 키워드가 없습니다!', '#f59e0b');
-                return;
-            }
-
-            const now = new Date();
-            const filename = `한글키워드_${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}.txt`;
-
-            const text = extractedKeywords.join('\n');
-            const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-
-            showToast('💾 파일이 다운로드되었습니다!', '#10b981');
-        }
-
-        // 초기화
-        function clearExtract() {
-            document.getElementById('extractInput').value = '';
-            document.getElementById('extractResultSection').classList.remove('active');
-            extractedKeywords = [];
-            showToast('🗑️ 초기화되었습니다!', '#6366f1');
-        }
-
-        // ========================================
-        // 띄어쓰기 만들기 기능
-        // ========================================
-
-        // 한글 띄어쓰기 처리 (개선된 알고리즘)
-        function correctSpacing(text) {
-            // 이미 띄어쓰기가 있으면 그대로 반환
-            if (text.includes(' ')) {
-                return text;
-            }
-
-            // 한글과 영어/숫자를 분리
-            let result = '';
-            let koreanBuffer = '';
-
-            for (let i = 0; i < text.length; i++) {
-                const char = text[i];
-                const isKorean = /[가-힣]/.test(char);
-
-                if (isKorean) {
-                    koreanBuffer += char;
+        // 사전에 없으면 휴리스틱 적용
+        if (!matched) {
+            const remaining = text.length - i;
+            
+            if (remaining >= 3) {
+                // 3글자 이상: 2-3글자 단위로 분리
+                const chunk = findBestChunk(text.substring(i), 2, 3);
+                words.push(chunk);
+                i += chunk.length;
+            } else if (remaining >= 2) {
+                words.push(text.substring(i, i + 2));
+                i += 2;
+            } else {
+                // 마지막 1글자는 앞 단어에 붙이기
+                if (words.length > 0) {
+                    words[words.length - 1] += text[i];
                 } else {
-                    // 한글 버퍼가 있으면 처리
-                    if (koreanBuffer) {
-                        result += applyKoreanSpacing(koreanBuffer) + ' ';
-                        koreanBuffer = '';
-                    }
-                    result += char;
+                    words.push(text[i]);
                 }
+                i++;
             }
+        }
+    }
 
-            // 남은 한글 버퍼 처리
+    return words;
+}
+
+// 최적의 청크 찾기 (2-3글자)
+function findBestChunk(text, minLen, maxLen) {
+    // 자음/모음 패턴 분석으로 형태소 경계 추정
+    for (let len = maxLen; len >= minLen; len--) {
+        if (text.length < len) continue;
+        
+        const chunk = text.substring(0, len);
+        
+        // 받침이 있는 글자로 끝나면 명사일 가능성이 높음
+        const lastChar = chunk[chunk.length - 1];
+        const lastCharCode = lastChar.charCodeAt(0) - 0xAC00;
+        const hasFinalConsonant = (lastCharCode % 28) !== 0;
+        
+        if (hasFinalConsonant && len >= 2) {
+            return chunk;
+        }
+    }
+    
+    // 기본값: 2글자
+    return text.substring(0, Math.min(2, text.length));
+}
+
+// 조사 병합
+function mergeParticles(words) {
+    const particles = new Set(['이', '가', '을', '를', '은', '는', '의', '에', '도', '만', '와', '과', '로', '고', '며']);
+    const mergedWords = [];
+
+    for (let i = 0; i < words.length; i++) {
+        const word = words[i];
+        
+        if (i > 0 && word.length === 1 && particles.has(word)) {
+            // 조사는 앞 단어와 합치기
+            mergedWords[mergedWords.length - 1] += word;
+        } else {
+            mergedWords.push(word);
+        }
+    }
+
+    return mergedWords.join(' ');
+}
+
+// 기본 띄어쓰기 (한글 외 문자 포함시)
+function basicSpacing(text) {
+    let result = '';
+    let koreanBuffer = '';
+
+    for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        const isKorean = /[가-힣]/.test(char);
+
+        if (isKorean) {
+            koreanBuffer += char;
+        } else {
             if (koreanBuffer) {
-                result += applyKoreanSpacing(koreanBuffer);
+                const dictionary = buildDictionary();
+                const spaced = dictionaryBasedSpacing(koreanBuffer, dictionary);
+                result += mergeParticles(spaced) + ' ';
+                koreanBuffer = '';
             }
-
-            // 연속된 공백 정리
-            return result.replace(/\s+/g, ' ').trim();
+            result += char;
         }
+    }
 
-        // 한글 띄어쓰기 알고리즘 (사전 기반)
-        function applyKoreanSpacing(text) {
-            // 확장된 한글 단어 사전
-            const dictionary = [
-                // 음악 관련 (길이순 정렬 - 긴 것부터)
-                '콜미바이유어네임', '트로트창법배우', '글로켄슈필', '알토리코더', '사일런트',
-                '바이올린', '오카리나', '리코더', '피아노소음키퍼',
-                '피아노', '기타', '드럼', '첼로', '플루트', '트럼펫', '색소폰',
-                '단소', '가야금', '해금', '거문고', '대금', '소금', '아쟁',
-                '연습', '패드', '운지법', '창법', '발성법', '소음', '키퍼', '악기', '롤업피아노',
-                '전자', '사일런트', '롤업', '음악', '노래', '멜로디', '화음',
-                '전주', '반주', '합창', '독창', '성악', '트로트',
-                // 드라마/영화 제목 관련
-                '베르테르', '넥스트', '마우스', '콜미바이유어네임',
-                '보건교사안은영', '경우의수', '고백부부', '사생활', '누가뭐래도',
-                // 사람 이름 관련
-                '김민기', '이가인', '가인', '쥬얼리이지현', '김진표',
-                // 일반 명사
-                '세상', '남자', '여자', '사람', '친구', '가족', '부모', '아내', '남편',
-                '학교', '회사', '집', '나라', '도시', '마을', '동네',
-                '영어', '토익', '그룹', '삼진', '반',
-                '비밀', '위험', '지명', '결혼', '요게벳', '피가로',
-                // 동사 (어간)
-                '배우', '듣', '부', '치', '연주하', '노래하', '부르', '맞추',
-                '만나', '가', '오', '하', '되', '보', '주', '먹', '자', '내',
-                // 형용사
-                '위험하', '비밀', '아름답', '예쁘', '좋', '나쁘', '크', '작',
-                // 조사/어미 (2글자)
-                '에서', '으로', '에게', '한테', '부터', '까지', '처럼', '마저',
-                // 조사/어미 (1글자)
-                '이', '가', '을', '를', '은', '는', '의', '에', '도', '만', '와', '과', '로',
-                '기', '법', '고', '며', '면', '게', '네', '요', '다'
-            ];
+    if (koreanBuffer) {
+        const dictionary = buildDictionary();
+        const spaced = dictionaryBasedSpacing(koreanBuffer, dictionary);
+        result += mergeParticles(spaced);
+    }
 
-            // 긴 단어부터 정렬 (greedy matching을 위해)
-            dictionary.sort((a, b) => b.length - a.length);
-
-            let words = [];
-            let i = 0;
-
-            while (i < text.length) {
-                let matched = false;
-
-                // 사전에서 가장 긴 매칭 찾기
-                for (const word of dictionary) {
-                    if (text.substring(i, i + word.length) === word) {
-                        words.push(word);
-                        i += word.length;
-                        matched = true;
-                        break;
-                    }
-                }
-
-                // 사전에 없으면 기본 규칙 적용
-                if (!matched) {
-                    // 남은 길이 확인
-                    const remaining = text.length - i;
-
-                    if (remaining >= 4) {
-                        // 4글자 이상 남았으면 3글자씩 분리
-                        words.push(text.substring(i, i + 3));
-                        i += 3;
-                    } else if (remaining >= 2) {
-                        // 2-3글자 남았으면 2글자씩 분리
-                        words.push(text.substring(i, i + 2));
-                        i += 2;
-                    } else {
-                        // 1글자 남았으면 이전 단어에 합치기
-                        if (words.length > 0) {
-                            words[words.length - 1] += text[i];
-                        } else {
-                            words.push(text[i]);
-                        }
-                        i++;
-                    }
-                }
-            }
-
-            // 조사는 앞 단어와 붙이기
-            const particles = ['이', '가', '을', '를', '은', '는', '의', '에', '도', '만', '와', '과', '로', '고'];
-            const mergedWords = [];
-
-            for (let j = 0; j < words.length; j++) {
-                if (j > 0 && particles.includes(words[j]) && words[j].length === 1) {
-                    // 조사는 앞 단어와 합치기
-                    mergedWords[mergedWords.length - 1] += words[j];
-                } else {
-                    mergedWords.push(words[j]);
-                }
-            }
-
-            return mergedWords.join(' ');
-        }
+    return result.replace(/\s+/g, ' ').trim();
+}
 
         // Naver API를 사용한 띄어쓰기 (비동기)
         async function correctSpacingWithAPI(text) {
