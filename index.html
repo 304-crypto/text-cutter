@@ -9,8 +9,10 @@
     <meta name="description" content="한글 키워드 추출 및 띄어쓰기 교정 도구">
     <style>
         /* ========================================
-           디자인 시스템
+           Apple Style Design System
            ======================================== */
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
         * {
             margin: 0;
@@ -19,7 +21,7 @@
         }
 
         :root {
-            /* 8px 그리드 시스템 */
+            /* Spacing */
             --space-1: 8px;
             --space-2: 16px;
             --space-3: 24px;
@@ -27,129 +29,144 @@
             --space-5: 40px;
             --space-6: 48px;
             --space-8: 64px;
+            --space-12: 96px;
 
-            /* 컬러 팔레트 */
-            --primary: #6366f1;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --dark-bg: #0f172a;
-            --dark-surface: #1e293b;
-            --text: #f1f5f9;
+            /* Apple Colors */
+            --primary: #007AFF;
+            --primary-hover: #0051D5;
+            --success: #34C759;
+            --warning: #FF9500;
+            --danger: #FF3B30;
 
-            /* 일관된 Radius */
+            /* Neutral Palette */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f7;
+            --bg-tertiary: #e8e8ed;
+            --surface: #ffffff;
+            --border: #d2d2d7;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --text-tertiary: #6e6e73;
+
+            /* Shadows - Apple Style */
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+            --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.16);
+
+            /* Border Radius */
             --radius-sm: 8px;
-            --radius-md: 16px;
+            --radius-md: 12px;
+            --radius-lg: 18px;
+            --radius-xl: 24px;
 
-            /* 그림자 단계 */
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
-            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.3);
-            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.4);
+            /* Typography */
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Malgun Gothic', sans-serif;
+            --text-xs: 0.75rem;
+            --text-sm: 0.875rem;
+            --text-base: 1rem;
+            --text-lg: 1.125rem;
+            --text-xl: 1.25rem;
+            --text-2xl: 1.5rem;
+            --text-3xl: 2rem;
+            --text-4xl: 2.5rem;
+            --text-5xl: 3.5rem;
 
-            /* 타이포그래피 스케일 */
-            --text-xs: 0.8rem;
-            --text-sm: 1rem;
-            --text-md: 1.25rem;
-            --text-lg: 1.563rem;
-            --text-xl: 1.953rem;
-            --text-2xl: 2.441rem;
-            --text-3xl: 3.052rem;
-
-            /* 애니메이션 타이밍 */
-            --duration: 250ms;
+            /* Animation */
+            --duration: 300ms;
+            --ease: cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* ========================================
-           기본 스타일
+           Base Styles
            ======================================== */
 
         body {
-            font-family: 'Segoe UI', 'Malgun Gothic', sans-serif;
-            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--dark-surface) 50%, var(--dark-bg) 100%);
-            color: var(--text);
+            font-family: var(--font-sans);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
             min-height: 100vh;
-            padding: var(--space-6);
-            font-size: var(--text-sm);
-            line-height: 1.6;
+            padding: var(--space-6) var(--space-4);
+            font-size: var(--text-base);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 980px;
             margin: 0 auto;
         }
 
         /* ========================================
-           헤더
+           Header - Apple Style
            ======================================== */
 
         header {
             text-align: center;
-            margin-bottom: var(--space-6);
-            animation: fadeIn var(--duration) ease-out;
+            margin-bottom: var(--space-12);
+            animation: fadeIn 0.6s ease-out;
         }
 
         h1 {
-            font-size: var(--text-3xl);
+            font-size: var(--text-5xl);
             font-weight: 700;
-            background: linear-gradient(135deg, var(--primary), var(--success));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--text-primary);
             margin-bottom: var(--space-2);
+            letter-spacing: -0.03em;
         }
 
         .subtitle {
-            color: var(--text);
-            opacity: 0.7;
-            font-size: var(--text-md);
+            color: var(--text-secondary);
+            font-size: var(--text-xl);
+            font-weight: 500;
         }
 
         /* ========================================
-           탭 네비게이션
+           Tab Navigation - Apple Style
            ======================================== */
 
         .tab-nav {
             display: flex;
-            gap: var(--space-2);
-            margin-bottom: var(--space-4);
-            background: var(--dark-bg);
-            padding: var(--space-2);
+            gap: var(--space-1);
+            margin-bottom: var(--space-6);
+            background: var(--surface);
+            padding: 4px;
             border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
         }
 
         .tab-button {
             flex: 1;
-            padding: var(--space-3) var(--space-4);
+            padding: var(--space-2) var(--space-4);
             background: transparent;
-            color: var(--text);
-            border: 2px solid transparent;
+            color: var(--text-secondary);
+            border: none;
             border-radius: var(--radius-sm);
-            font-size: var(--text-md);
+            font-size: var(--text-base);
             font-weight: 600;
             cursor: pointer;
-            transition: all var(--duration) ease;
-            opacity: 0.6;
+            transition: all var(--duration) var(--ease);
         }
 
         .tab-button:hover {
-            opacity: 1;
-            background: var(--dark-surface);
+            color: var(--text-primary);
+            background: var(--bg-tertiary);
         }
 
         .tab-button.active {
-            opacity: 1;
-            background: var(--primary);
-            color: white;
-            box-shadow: var(--shadow-md);
+            color: var(--text-primary);
+            background: var(--bg-secondary);
+            box-shadow: var(--shadow-sm);
         }
 
         /* ========================================
-           탭 컨텐츠
+           Tab Content
            ======================================== */
 
         .tab-content {
             display: none;
-            animation: fadeIn var(--duration) ease-out;
+            animation: fadeIn 0.4s ease-out;
         }
 
         .tab-content.active {
@@ -157,109 +174,111 @@
         }
 
         /* ========================================
-           메인 카드
+           Card - Apple Style
            ======================================== */
 
         .main-card {
-            background: var(--dark-surface);
-            border-radius: var(--radius-md);
-            padding: var(--space-6);
-            box-shadow: var(--shadow-lg);
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            padding: var(--space-8);
+            box-shadow: var(--shadow-md);
         }
 
         /* ========================================
-           입력 섹션
+           Input Section
            ======================================== */
 
         .input-section {
-            margin-bottom: var(--space-5);
+            margin-bottom: var(--space-6);
         }
 
         label {
             display: block;
-            font-size: var(--text-md);
+            font-size: var(--text-lg);
             font-weight: 600;
-            margin-bottom: var(--space-2);
-            color: var(--text);
+            margin-bottom: var(--space-3);
+            color: var(--text-primary);
         }
 
         textarea {
             width: 100%;
-            min-height: 320px;
-            padding: var(--space-3);
-            background: var(--dark-bg);
-            border: 2px solid transparent;
-            border-radius: var(--radius-sm);
-            color: var(--text);
-            font-size: var(--text-sm);
-            font-family: 'Segoe UI', 'Malgun Gothic', sans-serif;
+            min-height: 280px;
+            padding: var(--space-4);
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: var(--text-base);
+            font-family: var(--font-sans);
             resize: vertical;
-            transition: all var(--duration) ease;
+            transition: all var(--duration) var(--ease);
+            line-height: 1.6;
         }
 
         textarea:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+            background: var(--surface);
+            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1);
         }
 
         textarea::placeholder {
-            color: var(--text);
-            opacity: 0.4;
+            color: var(--text-secondary);
         }
 
         /* ========================================
-           버튼
+           Buttons - Apple Style
            ======================================== */
 
         .button-group {
             display: flex;
-            gap: var(--space-2);
+            gap: var(--space-3);
             flex-wrap: wrap;
-            margin-bottom: var(--space-5);
+            margin-bottom: var(--space-6);
         }
 
         button {
             flex: 1;
             min-width: 160px;
-            padding: var(--space-2) var(--space-4);
-            font-size: var(--text-sm);
+            padding: var(--space-3) var(--space-4);
+            font-size: var(--text-base);
             font-weight: 600;
             border: none;
-            border-radius: var(--radius-sm);
+            border-radius: var(--radius-md);
             cursor: pointer;
-            transition: all var(--duration) ease;
+            transition: all var(--duration) var(--ease);
         }
 
         .btn-primary {
             background: var(--primary);
             color: white;
-            box-shadow: var(--shadow-sm);
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
+            background: var(--primary-hover);
+            transform: translateY(-1px);
             box-shadow: var(--shadow-md);
         }
 
         .btn-secondary {
-            background: var(--dark-bg);
-            color: var(--text);
-            border: 2px solid var(--dark-surface);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
         }
 
         .btn-secondary:hover {
-            border-color: var(--primary);
+            background: var(--bg-tertiary);
+            transform: translateY(-1px);
         }
 
         .btn-success {
             background: var(--success);
             color: white;
-            box-shadow: var(--shadow-sm);
         }
 
         .btn-success:hover {
-            transform: translateY(-2px);
+            opacity: 0.9;
+            transform: translateY(-1px);
             box-shadow: var(--shadow-md);
         }
 
@@ -274,52 +293,52 @@
         }
 
         /* ========================================
-           통계 카드
+           Stats Cards - Apple Style
            ======================================== */
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: var(--space-2);
-            margin-bottom: var(--space-5);
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: var(--space-3);
+            margin-bottom: var(--space-6);
         }
 
         .stat-card {
-            background: var(--dark-bg);
-            padding: var(--space-4);
-            border-radius: var(--radius-sm);
+            background: var(--bg-secondary);
+            padding: var(--space-5);
+            border-radius: var(--radius-lg);
             text-align: center;
-            transition: all var(--duration) ease;
+            transition: all var(--duration) var(--ease);
+            border: 1px solid transparent;
         }
 
         .stat-card:hover {
             transform: translateY(-4px);
-            box-shadow: var(--shadow-md);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--border);
         }
 
         .stat-value {
-            font-size: var(--text-3xl);
+            font-size: var(--text-4xl);
             font-weight: 700;
-            background: linear-gradient(135deg, var(--primary), var(--success));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--primary);
             margin-bottom: var(--space-1);
+            letter-spacing: -0.02em;
         }
 
         .stat-label {
-            color: var(--text);
-            opacity: 0.7;
+            color: var(--text-secondary);
             font-size: var(--text-sm);
+            font-weight: 500;
         }
 
         /* ========================================
-           결과 섹션
+           Result Section
            ======================================== */
 
         .result-section {
             display: none;
-            animation: fadeIn var(--duration) ease-out;
+            animation: fadeIn 0.4s ease-out;
         }
 
         .result-section.active {
@@ -330,17 +349,17 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: var(--space-2);
-            gap: var(--space-2);
+            margin-bottom: var(--space-3);
+            gap: var(--space-3);
         }
 
         .result-box {
-            background: var(--dark-bg);
-            border-radius: var(--radius-sm);
-            padding: var(--space-3);
-            max-height: 400px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            padding: var(--space-4);
+            max-height: 450px;
             overflow-y: auto;
-            font-family: 'Consolas', 'Courier New', monospace;
+            border: 1px solid var(--border);
         }
 
         .result-box::-webkit-scrollbar {
@@ -348,111 +367,34 @@
         }
 
         .result-box::-webkit-scrollbar-track {
-            background: var(--dark-surface);
-            border-radius: var(--radius-sm);
+            background: transparent;
         }
 
         .result-box::-webkit-scrollbar-thumb {
-            background: var(--primary);
+            background: var(--border);
             border-radius: var(--radius-sm);
+        }
+
+        .result-box::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary);
         }
 
         .keyword-item {
-            padding: var(--space-2) var(--space-3);
-            margin-bottom: var(--space-1);
-            background: var(--dark-surface);
+            padding: var(--space-3) var(--space-4);
+            margin-bottom: var(--space-2);
+            background: var(--surface);
             border-radius: var(--radius-sm);
-            border-left: 4px solid var(--primary);
-            transition: all var(--duration) ease;
-            animation: slideIn var(--duration) ease-out;
-        }
-
-        .keyword-item:hover {
-            background: var(--primary);
-            color: white;
-            transform: translateX(4px);
-        }
-
-        /* ========================================
-           로딩 스피너
-           ======================================== */
-
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* ========================================
-           토스트
-           ======================================== */
-
-        .toast {
-            position: fixed;
-            bottom: var(--space-4);
-            right: var(--space-4);
-            background: var(--success);
-            color: white;
-            padding: var(--space-2) var(--space-3);
-            border-radius: var(--radius-sm);
-            box-shadow: var(--shadow-lg);
-            display: none;
-            align-items: center;
-            gap: var(--space-2);
-            z-index: 1000;
-            animation: slideIn var(--duration) ease-out;
-        }
-
-        .toast.show {
-            display: flex;
-        }
-
-        .toast-icon {
-            font-size: var(--text-lg);
-        }
-
-        /* ========================================
-           푸터
-           ======================================== */
-
-        footer {
-            text-align: center;
-            margin-top: var(--space-8);
-            color: var(--text);
-            opacity: 0.5;
-            font-size: var(--text-sm);
-        }
-
-        /* ========================================
-           애니메이션
-           ======================================== */
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(16px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            border: 1px solid var(--border);
+            transition: all var(--duration) var(--ease);
+            animation: slideIn 0.3s ease-out;
+            font-weight: 500;
+            color: var(--text-primary);
         }
 
         @keyframes slideIn {
             from {
                 opacity: 0;
-                transform: translateX(-16px);
+                transform: translateX(-20px);
             }
 
             to {
@@ -461,21 +403,100 @@
             }
         }
 
+        .keyword-item:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateX(4px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-sm);
+        }
+
         /* ========================================
-           반응형
+           Toast - Apple Style
+           ======================================== */
+
+        .toast {
+            position: fixed;
+            bottom: var(--space-6);
+            right: var(--space-6);
+            background: var(--surface);
+            color: var(--text-primary);
+            padding: var(--space-3) var(--space-5);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            display: none;
+            align-items: center;
+            gap: var(--space-2);
+            z-index: 1000;
+            border: 1px solid var(--border);
+            font-weight: 500;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .toast.show {
+            display: flex;
+        }
+
+        .toast-icon {
+            font-size: var(--text-xl);
+        }
+
+        /* ========================================
+           Footer
+           ======================================== */
+
+        footer {
+            text-align: center;
+            margin-top: var(--space-12);
+            padding-top: var(--space-6);
+            color: var(--text-secondary);
+            font-size: var(--text-sm);
+            border-top: 1px solid var(--border);
+        }
+
+        /* ========================================
+           Animations
+           ======================================== */
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ========================================
+           Responsive
            ======================================== */
 
         @media (max-width: 768px) {
             body {
-                padding: var(--space-3);
+                padding: var(--space-4) var(--space-3);
             }
 
             h1 {
-                font-size: var(--text-2xl);
+                font-size: var(--text-3xl);
             }
 
             .main-card {
-                padding: var(--space-4);
+                padding: var(--space-5);
             }
 
             .button-group {
@@ -498,6 +519,12 @@
             .tab-nav {
                 flex-direction: column;
             }
+
+            .toast {
+                bottom: var(--space-4);
+                right: var(--space-4);
+                left: var(--space-4);
+            }
         }
     </style>
 </head>
@@ -505,7 +532,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>🔧 한글 텍스트 도구</h1>
+            <h1>한글 텍스트 도구</h1>
             <p class="subtitle">키워드 추출 및 띄어쓰기 교정</p>
         </header>
 
@@ -654,17 +681,14 @@
 
         // 탭 전환
         function switchTab(tabName) {
-            // 모든 탭 버튼 비활성화
             document.querySelectorAll('.tab-button').forEach(btn => {
                 btn.classList.remove('active');
             });
 
-            // 모든 탭 컨텐츠 숨기기
             document.querySelectorAll('.tab-content').forEach(content => {
                 content.classList.remove('active');
             });
 
-            // 선택된 탭 활성화
             if (tabName === 'extract') {
                 document.querySelector('.tab-button:nth-child(1)').classList.add('active');
                 document.getElementById('extractTab').classList.add('active');
@@ -674,329 +698,341 @@
             }
         }
 
-// ========================================
-// 키워드 추출 기능 (개선)
-// ========================================
+        // ========================================
+        // 키워드 추출 기능
+        // ========================================
 
-// 한글 명사만 추출하는 함수
-function extractKoreanKeywords(text) {
-    // 순수 한글만 추출 (2글자 이상)
-    const regex = /[가-힣]{2,}/g;
-    const words = text.match(regex) || [];
+        // 한글 명사만 추출하는 함수
+        function extractKoreanKeywords(text) {
+            const regex = /[가-힣]{2,}/g;
+            const words = text.match(regex) || [];
 
-    const seen = new Set();
-    const result = [];
+            const seen = new Set();
+            const result = [];
 
-    words.forEach(word => {
-        const stem = removeKoreanEndings(word);
+            words.forEach(word => {
+                const stem = removeKoreanEndings(word);
 
-        // 2글자 이상의 한글 명사만 추가
-        if (stem.length >= 2 && /^[가-힣]+$/.test(stem) && !seen.has(stem)) {
-            seen.add(stem);
-            result.push(stem);
+                if (stem.length >= 2 && /^[가-힣]+$/.test(stem) && !seen.has(stem)) {
+                    seen.add(stem);
+                    result.push(stem);
+                }
+            });
+
+            return {
+                total: words.length,
+                unique: result,
+                removed: words.length - result.length
+            };
         }
-    });
 
-    return {
-        total: words.length,
-        unique: result,
-        removed: words.length - result.length
-    };
-}
-
-// 한글 어미 제거 함수 (개선)
-function removeKoreanEndings(word) {
-    // 순수 한글이 아니면 그대로 반환
-    if (!/^[가-힣]+$/.test(word)) {
-        return word;
-    }
-
-    const endings = [
-        // 어미 (긴 것부터)
-        '습니다', '십시오', 'ㅂ니다',
-        '되길', '하길', '되도록', '하도록',
-        // 조사
-        '에서', '으로부터', '으로써', '부터', '까지', '처럼', '마저', '조차',
-        // 단음절 조사
-        '는', '은', '을', '를', '이', '가', '에', '와', '과', '의', '도', '만', '로',
-        // 어미
-        '한', '할', '했', '하', '해', '히',
-        '요', '어', '아', '지', '고', '게', '네', '죠',
-        '되', '시', '니', '나', '다', '길', '며', '면', '자', '세', '죠'
-    ];
-
-    let stem = word;
-
-    // 최대 2번까지 제거 (복합 어미 대응)
-    for (let i = 0; i < 2; i++) {
-        let removed = false;
-        for (const ending of endings) {
-            if (stem.endsWith(ending) && stem.length > ending.length + 1) {
-                stem = stem.slice(0, -ending.length);
-                removed = true;
-                break;
+        // 한글 어미 제거 함수
+        function removeKoreanEndings(word) {
+            if (!/^[가-힣]+$/.test(word)) {
+                return word;
             }
+
+            const endings = [
+                '습니다', '십시오', 'ㅂ니다',
+                '되길', '하길', '되도록', '하도록',
+                '에서', '으로부터', '으로써', '부터', '까지', '처럼', '마저', '조차',
+                '는', '은', '을', '를', '이', '가', '에', '와', '과', '의', '도', '만', '로',
+                '한', '할', '했', '하', '해', '히',
+                '요', '어', '아', '지', '고', '게', '네', '죠',
+                '되', '시', '니', '나', '다', '길', '며', '면', '자', '세'
+            ];
+
+            let stem = word;
+
+            for (let i = 0; i < 2; i++) {
+                let removed = false;
+                for (const ending of endings) {
+                    if (stem.endsWith(ending) && stem.length > ending.length + 1) {
+                        stem = stem.slice(0, -ending.length);
+                        removed = true;
+                        break;
+                    }
+                }
+                if (!removed) break;
+            }
+
+            return stem;
         }
-        if (!removed) break;
-    }
 
-    return stem;
-}
+        // 키워드 추출 실행
+        function extractKeywords() {
+            const inputText = document.getElementById('extractInput').value;
 
-// ========================================
-// 띄어쓰기 만들기 기능 (대폭 개선)
-// ========================================
+            if (!inputText.trim()) {
+                showToast('⚠️ 텍스트를 입력해주세요!', '#FF9500');
+                return;
+            }
 
-// 확장된 한글 사전
-const KOREAN_DICTIONARY = {
-    // 음악 관련
-    music: [
-        '사일런트기타', '드럼연습패드', '전자바이올린', '롤업피아노', '피아노소음키퍼',
-        '글로켄슈필', '알토리코더', '콜미바이유어네임', '트로트창법배우',
-        '사일런트', '바이올린', '오카리나', '리코더', '피아노', '기타', '드럼', 
-        '첼로', '플루트', '트럼펫', '색소폰', '단소', '가야금', '해금', '거문고', 
-        '대금', '소금', '아쟁', '연습', '패드', '운지법', '창법', '발성법', 
-        '소음', '키퍼', '악기', '롤업', '음악', '노래', '멜로디', '화음',
-        '전주', '반주', '합창', '독창', '성악', '트로트', '클래식', '재즈'
-    ],
-    
-    // 드라마/영화/책
-    media: [
-        '이풍진세상을만났으니', '보건교사안은영', '베르테르', '넥스트', '마우스',
-        '경우의수', '고백부부', '사생활', '누가뭐래도', '베르테르', '피가로'
-    ],
-    
-    // 인명
-    names: [
-        '쥬얼리이지현', '김민기', '이가인', '김진표', '요게벳'
-    ],
-    
-    // 일반 명사 (빈도순)
-    common: [
-        '세상', '사람', '친구', '가족', '부모', '아내', '남편', '아이', '아들', '딸',
-        '학교', '회사', '병원', '은행', '시장', '상점', '마트',
-        '집', '방', '거실', '주방', '화장실', '욕실', '베란다',
-        '나라', '도시', '마을', '동네', '지역', '곳',
-        '시간', '날짜', '요일', '주말', '평일',
-        '아침', '점심', '저녁', '밤', '새벽',
-        '봄', '여름', '가을', '겨울',
-        '음식', '밥', '국', '반찬', '요리',
-        '영어', '토익', '그룹', '삼진', '반',
-        '비밀', '위험', '지명', '결혼', '사랑', '행복',
-        '남자', '여자', '어른', '어린이', '청소년'
-    ],
-    
-    // 동사 어간
-    verbs: [
-        '배우', '가르치', '공부하', '연습하', '익히',
-        '듣', '보', '읽', '쓰', '말하',
-        '만들', '만나', '가', '오', '와', '되', '하',
-        '먹', '마시', '자', '일어나', '눕',
-        '사랑하', '좋아하', '싫어하', '미워하',
-        '생각하', '느끼', '알', '모르', '기억하'
-    ],
-    
-    // 형용사
-    adjectives: [
-        '아름답', '예쁘', '멋지', '훌륭하',
-        '좋', '나쁘', '크', '작', '높', '낮',
-        '밝', '어둡', '따뜻하', '차갑', '뜨겁',
-        '위험하', '안전하', '편하', '불편하'
-    ],
-    
-    // 기능어
-    particles: [
-        '에서', '으로', '에게', '한테', '부터', '까지', '처럼', '마저', '조차',
-        '이', '가', '을', '를', '은', '는', '의', '에', '도', '만', '와', '과', '로',
-        '이나', '나', '든지', '라도', '마저', '조차', '부터', '까지'
-    ]
-};
+            const result = extractKoreanKeywords(inputText);
 
-// 모든 사전을 하나로 합치고 길이순 정렬
-function buildDictionary() {
-    const allWords = [];
-    
-    for (const category in KOREAN_DICTIONARY) {
-        allWords.push(...KOREAN_DICTIONARY[category]);
-    }
-    
-    // 중복 제거 및 길이순 정렬 (긴 것부터)
-    return [...new Set(allWords)].sort((a, b) => b.length - a.length);
-}
+            if (result.unique.length === 0) {
+                showToast('❌ 추출된 한글 키워드가 없습니다!', '#FF3B30');
+                return;
+            }
 
-// 한글 띄어쓰기 처리 (개선된 알고리즘)
-function correctSpacing(text) {
-    // 이미 띄어쓰기가 있으면 그대로 반환
-    if (text.includes(' ')) {
-        return text;
-    }
+            extractedKeywords = result.unique;
 
-    // 순수 한글이 아닌 경우 기본 처리
-    if (!/^[가-힣]+$/.test(text)) {
-        return basicSpacing(text);
-    }
+            document.getElementById('extractTotalCount').textContent = result.total;
+            document.getElementById('extractUniqueCount').textContent = result.unique.length;
+            document.getElementById('extractRemovedCount').textContent = result.removed;
 
-    // 사전 기반 띄어쓰기
-    const dictionary = buildDictionary();
-    const result = dictionaryBasedSpacing(text, dictionary);
-    
-    // 후처리: 조사 붙이기
-    return mergeParticles(result);
-}
+            const resultBox = document.getElementById('extractResultBox');
+            resultBox.innerHTML = result.unique
+                .map((keyword, index) => `<div class="keyword-item" style="animation-delay: ${index * 0.02}s">${keyword}</div>`)
+                .join('');
 
-// 사전 기반 띄어쓰기
-function dictionaryBasedSpacing(text, dictionary) {
-    let words = [];
-    let i = 0;
+            document.getElementById('extractResultSection').classList.add('active');
 
-    while (i < text.length) {
-        let matched = false;
-        let bestMatch = '';
+            showToast('✅ 키워드 추출 완료!', '#34C759');
+        }
 
-        // 현재 위치에서 가능한 가장 긴 매칭 찾기
-        for (const word of dictionary) {
-            if (text.substring(i, i + word.length) === word) {
-                // 더 긴 매칭이 있는지 확인
-                if (word.length > bestMatch.length) {
-                    bestMatch = word;
+        // 클립보드에 복사
+        function copyExtractResult() {
+            if (extractedKeywords.length === 0) {
+                showToast('⚠️ 추출된 키워드가 없습니다!', '#FF9500');
+                return;
+            }
+
+            const text = extractedKeywords.join('\n');
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('📋 클립보드에 복사되었습니다!', '#34C759');
+            }).catch(() => {
+                showToast('❌ 복사에 실패했습니다!', '#FF3B30');
+            });
+        }
+
+        // 파일 다운로드
+        function downloadExtractResult() {
+            if (extractedKeywords.length === 0) {
+                showToast('⚠️ 추출된 키워드가 없습니다!', '#FF9500');
+                return;
+            }
+
+            const now = new Date();
+            const filename = `한글키워드_${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}.txt`;
+
+            const text = extractedKeywords.join('\n');
+            const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showToast('💾 파일이 다운로드되었습니다!', '#34C759');
+        }
+
+        // 초기화
+        function clearExtract() {
+            document.getElementById('extractInput').value = '';
+            document.getElementById('extractResultSection').classList.remove('active');
+            extractedKeywords = [];
+            showToast('🗑️ 초기화되었습니다!', '#007AFF');
+        }
+
+        // ========================================
+        // 띄어쓰기 만들기 기능
+        // ========================================
+
+        const KOREAN_DICTIONARY = {
+            music: [
+                '사일런트기타', '드럼연습패드', '전자바이올린', '롤업피아노', '피아노소음키퍼',
+                '글로켄슈필', '알토리코더', '콜미바이유어네임', '트로트창법배우',
+                '사일런트', '바이올린', '오카리나', '리코더', '피아노', '기타', '드럼',
+                '첼로', '플루트', '트럼펫', '색소폰', '단소', '가야금', '해금', '거문고',
+                '대금', '소금', '아쟁', '연습', '패드', '운지법', '창법', '발성법',
+                '소음', '키퍼', '악기', '롤업', '음악', '노래', '멜로디', '화음',
+                '전주', '반주', '합창', '독창', '성악', '트로트', '클래식', '재즈'
+            ],
+
+            media: [
+                '이풍진세상을만났으니', '보건교사안은영', '베르테르', '넥스트', '마우스',
+                '경우의수', '고백부부', '사생활', '누가뭐래도', '피가로'
+            ],
+
+            names: [
+                '쥬얼리이지현', '김민기', '이가인', '김진표', '요게벳'
+            ],
+
+            common: [
+                '세상', '사람', '친구', '가족', '부모', '아내', '남편', '아이', '아들', '딸',
+                '학교', '회사', '병원', '은행', '시장', '상점', '마트',
+                '집', '방', '거실', '주방', '화장실', '욕실', '베란다',
+                '나라', '도시', '마을', '동네', '지역', '곳',
+                '시간', '날짜', '요일', '주말', '평일',
+                '아침', '점심', '저녁', '밤', '새벽',
+                '봄', '여름', '가을', '겨울',
+                '음식', '밥', '국', '반찬', '요리',
+                '영어', '토익', '그룹', '삼진', '반',
+                '비밀', '위험', '지명', '결혼', '사랑', '행복',
+                '남자', '여자', '어른', '어린이', '청소년'
+            ],
+
+            verbs: [
+                '배우', '가르치', '공부하', '연습하', '익히',
+                '듣', '보', '읽', '쓰', '말하',
+                '만들', '만나', '가', '오', '와', '되', '하',
+                '먹', '마시', '자', '일어나', '눕',
+                '사랑하', '좋아하', '싫어하', '미워하',
+                '생각하', '느끼', '알', '모르', '기억하'
+            ],
+
+            adjectives: [
+                '아름답', '예쁘', '멋지', '훌륭하',
+                '좋', '나쁘', '크', '작', '높', '낮',
+                '밝', '어둡', '따뜻하', '차갑', '뜨겁',
+                '위험하', '안전하', '편하', '불편하'
+            ],
+
+            particles: [
+                '에서', '으로', '에게', '한테', '부터', '까지', '처럼', '마저', '조차',
+                '이', '가', '을', '를', '은', '는', '의', '에', '도', '만', '와', '과', '로',
+                '이나', '나', '든지', '라도'
+            ]
+        };
+
+        function buildDictionary() {
+            const allWords = [];
+
+            for (const category in KOREAN_DICTIONARY) {
+                allWords.push(...KOREAN_DICTIONARY[category]);
+            }
+
+            return [...new Set(allWords)].sort((a, b) => b.length - a.length);
+        }
+
+        function correctSpacing(text) {
+            if (text.includes(' ')) {
+                return text;
+            }
+
+            if (!/^[가-힣]+$/.test(text)) {
+                return basicSpacing(text);
+            }
+
+            const dictionary = buildDictionary();
+            const result = dictionaryBasedSpacing(text, dictionary);
+
+            return mergeParticles(result);
+        }
+
+        function dictionaryBasedSpacing(text, dictionary) {
+            let words = [];
+            let i = 0;
+
+            while (i < text.length) {
+                let matched = false;
+                let bestMatch = '';
+
+                for (const word of dictionary) {
+                    if (text.substring(i, i + word.length) === word) {
+                        if (word.length > bestMatch.length) {
+                            bestMatch = word;
+                        }
+                    }
+                }
+
+                if (bestMatch) {
+                    words.push(bestMatch);
+                    i += bestMatch.length;
+                    matched = true;
+                }
+
+                if (!matched) {
+                    const remaining = text.length - i;
+
+                    if (remaining >= 3) {
+                        const chunk = findBestChunk(text.substring(i), 2, 3);
+                        words.push(chunk);
+                        i += chunk.length;
+                    } else if (remaining >= 2) {
+                        words.push(text.substring(i, i + 2));
+                        i += 2;
+                    } else {
+                        if (words.length > 0) {
+                            words[words.length - 1] += text[i];
+                        } else {
+                            words.push(text[i]);
+                        }
+                        i++;
+                    }
                 }
             }
+
+            return words;
         }
 
-        if (bestMatch) {
-            words.push(bestMatch);
-            i += bestMatch.length;
-            matched = true;
+        function findBestChunk(text, minLen, maxLen) {
+            for (let len = maxLen; len >= minLen; len--) {
+                if (text.length < len) continue;
+
+                const chunk = text.substring(0, len);
+                const lastChar = chunk[chunk.length - 1];
+                const lastCharCode = lastChar.charCodeAt(0) - 0xAC00;
+                const hasFinalConsonant = (lastCharCode % 28) !== 0;
+
+                if (hasFinalConsonant && len >= 2) {
+                    return chunk;
+                }
+            }
+
+            return text.substring(0, Math.min(2, text.length));
         }
 
-        // 사전에 없으면 휴리스틱 적용
-        if (!matched) {
-            const remaining = text.length - i;
-            
-            if (remaining >= 3) {
-                // 3글자 이상: 2-3글자 단위로 분리
-                const chunk = findBestChunk(text.substring(i), 2, 3);
-                words.push(chunk);
-                i += chunk.length;
-            } else if (remaining >= 2) {
-                words.push(text.substring(i, i + 2));
-                i += 2;
-            } else {
-                // 마지막 1글자는 앞 단어에 붙이기
-                if (words.length > 0) {
-                    words[words.length - 1] += text[i];
+        function mergeParticles(words) {
+            const particles = new Set(['이', '가', '을', '를', '은', '는', '의', '에', '도', '만', '와', '과', '로', '고', '며']);
+            const mergedWords = [];
+
+            for (let i = 0; i < words.length; i++) {
+                const word = words[i];
+
+                if (i > 0 && word.length === 1 && particles.has(word)) {
+                    mergedWords[mergedWords.length - 1] += word;
                 } else {
-                    words.push(text[i]);
+                    mergedWords.push(word);
                 }
-                i++;
             }
+
+            return mergedWords.join(' ');
         }
-    }
 
-    return words;
-}
+        function basicSpacing(text) {
+            let result = '';
+            let koreanBuffer = '';
 
-// 최적의 청크 찾기 (2-3글자)
-function findBestChunk(text, minLen, maxLen) {
-    // 자음/모음 패턴 분석으로 형태소 경계 추정
-    for (let len = maxLen; len >= minLen; len--) {
-        if (text.length < len) continue;
-        
-        const chunk = text.substring(0, len);
-        
-        // 받침이 있는 글자로 끝나면 명사일 가능성이 높음
-        const lastChar = chunk[chunk.length - 1];
-        const lastCharCode = lastChar.charCodeAt(0) - 0xAC00;
-        const hasFinalConsonant = (lastCharCode % 28) !== 0;
-        
-        if (hasFinalConsonant && len >= 2) {
-            return chunk;
-        }
-    }
-    
-    // 기본값: 2글자
-    return text.substring(0, Math.min(2, text.length));
-}
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                const isKorean = /[가-힣]/.test(char);
 
-// 조사 병합
-function mergeParticles(words) {
-    const particles = new Set(['이', '가', '을', '를', '은', '는', '의', '에', '도', '만', '와', '과', '로', '고', '며']);
-    const mergedWords = [];
+                if (isKorean) {
+                    koreanBuffer += char;
+                } else {
+                    if (koreanBuffer) {
+                        const dictionary = buildDictionary();
+                        const spaced = dictionaryBasedSpacing(koreanBuffer, dictionary);
+                        result += mergeParticles(spaced) + ' ';
+                        koreanBuffer = '';
+                    }
+                    result += char;
+                }
+            }
 
-    for (let i = 0; i < words.length; i++) {
-        const word = words[i];
-        
-        if (i > 0 && word.length === 1 && particles.has(word)) {
-            // 조사는 앞 단어와 합치기
-            mergedWords[mergedWords.length - 1] += word;
-        } else {
-            mergedWords.push(word);
-        }
-    }
-
-    return mergedWords.join(' ');
-}
-
-// 기본 띄어쓰기 (한글 외 문자 포함시)
-function basicSpacing(text) {
-    let result = '';
-    let koreanBuffer = '';
-
-    for (let i = 0; i < text.length; i++) {
-        const char = text[i];
-        const isKorean = /[가-힣]/.test(char);
-
-        if (isKorean) {
-            koreanBuffer += char;
-        } else {
             if (koreanBuffer) {
                 const dictionary = buildDictionary();
                 const spaced = dictionaryBasedSpacing(koreanBuffer, dictionary);
-                result += mergeParticles(spaced) + ' ';
-                koreanBuffer = '';
-            }
-            result += char;
-        }
-    }
-
-    if (koreanBuffer) {
-        const dictionary = buildDictionary();
-        const spaced = dictionaryBasedSpacing(koreanBuffer, dictionary);
-        result += mergeParticles(spaced);
-    }
-
-    return result.replace(/\s+/g, ' ').trim();
-}
-
-        // Naver API를 사용한 띄어쓰기 (비동기)
-        async function correctSpacingWithAPI(text) {
-            try {
-                // PNU 한글 띄어쓰기 API 사용
-                const response = await fetch('https://pusan.ac.kr/kor/CMS/Board/Board.do?mCode=MN186', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: `text1=${encodeURIComponent(text)}`
-                });
-
-                if (response.ok) {
-                    const html = await response.text();
-                    // HTML 파싱하여 결과 추출
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(html, 'text/html');
-                    const resultElement = doc.querySelector('.result');
-
-                    if (resultElement) {
-                        return resultElement.textContent.trim();
-                    }
-                }
-            } catch (error) {
-                console.error('API Error:', error);
+                result += mergeParticles(spaced);
             }
 
-            // API 실패 시 로컬 알고리즘 사용
-            return correctSpacing(text);
+            return result.replace(/\s+/g, ' ').trim();
         }
 
         // 띄어쓰기 만들기 실행
@@ -1004,29 +1040,26 @@ function basicSpacing(text) {
             const inputText = document.getElementById('spacingInput').value;
 
             if (!inputText.trim()) {
-                showToast('⚠️ 텍스트를 입력해주세요!', '#f59e0b');
+                showToast('⚠️ 텍스트를 입력해주세요!', '#FF9500');
                 return;
             }
 
-            // 줄 단위로 분리
             const lines = inputText.split('\n').filter(line => line.trim());
 
             if (lines.length === 0) {
-                showToast('❌ 처리할 텍스트가 없습니다!', '#ef4444');
+                showToast('❌ 처리할 텍스트가 없습니다!', '#FF3B30');
                 return;
             }
 
-            // 로딩 표시
-            showToast('⏳ 띄어쓰기 처리 중...', '#6366f1');
+            showToast('⏳ 띄어쓰기 처리 중...', '#007AFF');
 
             spacingResults = [];
             let successCount = 0;
             let failCount = 0;
 
-            // 각 줄에 대해 띄어쓰기 처리
             for (const line of lines) {
                 try {
-                    const corrected = await correctSpacing(line.trim());
+                    const corrected = correctSpacing(line.trim());
                     spacingResults.push({
                         original: line.trim(),
                         corrected: corrected,
@@ -1042,16 +1075,13 @@ function basicSpacing(text) {
                     failCount++;
                 }
 
-                // 너무 빠른 요청 방지 (100ms 딜레이)
-                await new Promise(resolve => setTimeout(resolve, 100));
+                await new Promise(resolve => setTimeout(resolve, 50));
             }
 
-            // 통계 업데이트
             document.getElementById('spacingTotalCount').textContent = lines.length;
             document.getElementById('spacingSuccessCount').textContent = successCount;
             document.getElementById('spacingFailCount').textContent = failCount;
 
-            // 결과 표시
             const resultBox = document.getElementById('spacingResultBox');
             resultBox.innerHTML = spacingResults
                 .map((item, index) => `
@@ -1061,31 +1091,28 @@ function basicSpacing(text) {
                 `)
                 .join('');
 
-            // 결과 섹션 표시
             document.getElementById('spacingResultSection').classList.add('active');
 
-            showToast('✅ 띄어쓰기 처리 완료!', '#10b981');
+            showToast('✅ 띄어쓰기 처리 완료!', '#34C759');
         }
 
-        // 띄어쓰기 결과 복사
         function copySpacingResult() {
             if (spacingResults.length === 0) {
-                showToast('⚠️ 처리된 결과가 없습니다!', '#f59e0b');
+                showToast('⚠️ 처리된 결과가 없습니다!', '#FF9500');
                 return;
             }
 
             const text = spacingResults.map(item => item.corrected).join('\n');
             navigator.clipboard.writeText(text).then(() => {
-                showToast('📋 클립보드에 복사되었습니다!', '#10b981');
+                showToast('📋 클립보드에 복사되었습니다!', '#34C759');
             }).catch(() => {
-                showToast('❌ 복사에 실패했습니다!', '#ef4444');
+                showToast('❌ 복사에 실패했습니다!', '#FF3B30');
             });
         }
 
-        // 띄어쓰기 결과 다운로드
         function downloadSpacingResult() {
             if (spacingResults.length === 0) {
-                showToast('⚠️ 처리된 결과가 없습니다!', '#f59e0b');
+                showToast('⚠️ 처리된 결과가 없습니다!', '#FF9500');
                 return;
             }
 
@@ -1104,28 +1131,26 @@ function basicSpacing(text) {
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
 
-            showToast('💾 파일이 다운로드되었습니다!', '#10b981');
+            showToast('💾 파일이 다운로드되었습니다!', '#34C759');
         }
 
-        // 띄어쓰기 초기화
         function clearSpacing() {
             document.getElementById('spacingInput').value = '';
             document.getElementById('spacingResultSection').classList.remove('active');
             spacingResults = [];
-            showToast('🗑️ 초기화되었습니다!', '#6366f1');
+            showToast('🗑️ 초기화되었습니다!', '#007AFF');
         }
 
         // ========================================
         // 공통 함수
         // ========================================
 
-        // 토스트 메시지 표시
-        function showToast(message, color = '#10b981') {
+        function showToast(message, color = '#34C759') {
             const toast = document.getElementById('toast');
             const toastMessage = document.getElementById('toastMessage');
 
             toastMessage.textContent = message;
-            toast.style.background = color;
+            toast.style.borderColor = color;
             toast.classList.add('show');
 
             setTimeout(() => {
@@ -1133,7 +1158,7 @@ function basicSpacing(text) {
             }, 3000);
         }
 
-        // Enter 키로 실행 (Ctrl+Enter)
+        // Ctrl+Enter로 실행
         document.getElementById('extractInput').addEventListener('keydown', (e) => {
             if (e.ctrlKey && e.key === 'Enter') {
                 extractKeywords();
